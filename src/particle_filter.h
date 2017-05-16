@@ -10,6 +10,7 @@
 #define PARTICLE_FILTER_H_
 
 #include "helper_functions.h"
+#include "map.h"
 
 struct Particle {
 
@@ -75,7 +76,7 @@ public:
 	 * @param predicted Vector of predicted landmark observations
 	 * @param observations Vector of landmark observations
 	 */
-	void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
+	void dataAssociation(std::vector<LandmarkObs> &predicted, std::vector<Map::single_landmark_s> landmark_list);
 	
 	/**
 	 * updateWeights Updates the weights for each particle based on the likelihood of the 
@@ -100,7 +101,18 @@ public:
 	 * @param filename File to write particle positions to.
 	 */
 	void write(std::string filename);
-	
+
+  /*
+   * transform the observations between the VEHICLE'S coordinate system and the MAP'S coordinate system
+   * using this formula http://planning.cs.uiuc.edu/node99.html
+   */
+  std::vector<LandmarkObs> transform_landmarks(Particle particles, std::vector<LandmarkObs> landmark_observations);
+
+
+  /*
+   *
+   */
+  std::vector<LandmarkObs> get_landmarks(Map map_landmarks);
 	/**
 	 * initialized Returns whether particle filter is initialized yet or not.
 	 */
